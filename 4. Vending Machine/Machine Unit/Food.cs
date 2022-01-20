@@ -6,7 +6,7 @@ namespace _4._Vending_Machine.Machine_Unit
 {
     public class Food : Product
     {
-        public Food(int Slot, string Info, int Cost) : base(Slot, Info, Cost) { }
+        public Food(int Slot, string Info, int Cost, int Calories) : base(Slot, Info, Cost, Calories) { }
 
         public override void Examine()
         {
@@ -17,5 +17,12 @@ namespace _4._Vending_Machine.Machine_Unit
         {
             Console.WriteLine("Please eat your food in the cafeteria.");
         }
+
+        public override double MinutesToBurnCalories()
+        {
+            return MinutesToExercise = Calories / 1.8;
+        }
+
+
     }
 }

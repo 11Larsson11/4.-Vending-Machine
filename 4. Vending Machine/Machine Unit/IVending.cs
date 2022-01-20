@@ -6,12 +6,10 @@ namespace _4._Vending_Machine.Machine_Unit
 {
     interface IVending
     {
-        void ShowAll();
+        public abstract void InsertMoney();
+        public abstract void ShowAll();
+        public abstract void Purchase(int Cost, int poolMoney);
+        public abstract void EndTransaction();
 
-        void InsertMoney();
-
-        void Purchase(int choice);
-
-        void EndTransaction();
     }
 }

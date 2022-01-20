@@ -11,6 +11,9 @@ namespace Vending_Machine_Test_xUnit
         [Fact]
         public void CandyTest()
         {
+
+            
+
             int a = 1;
             string b = "Generic Name";
             int c = 2;

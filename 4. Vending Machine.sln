@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31729.503
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "4. Vending Machine", "4. Vending Machine\4. Vending Machine.csproj", "{0CE9D363-4963-4C95-BBF8-7B560108CBA8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "4. Vending Machine", "4. Vending Machine\4. Vending Machine.csproj", "{0CE9D363-4963-4C95-BBF8-7B560108CBA8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vending Machine Test-xUnit", "Vending Machine Test-xUnit\Vending Machine Test-xUnit.csproj", "{C7A84019-995C-4269-B713-0F7600637F33}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vending Machine Test-xUnit", "Vending Machine Test-xUnit\Vending Machine Test-xUnit.csproj", "{C7A84019-995C-4269-B713-0F7600637F33}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

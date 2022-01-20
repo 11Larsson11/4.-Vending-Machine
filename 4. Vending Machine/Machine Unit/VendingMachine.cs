@@ -6,12 +6,14 @@ using System.Text;
 
 namespace _4._Vending_Machine.Machine_Unit
 {
-
-    public class VendingMachine : Product, IVending
+    public class VendingMachine : IVending
     {
-        public static void MachineMenu()
-        {
 
+        public static int MoneyPool { get; set; }
+        public string ExchangeMoney { get; set; }
+
+        public static void PowerOn()
+        {
             bool running = true;
 
             while (running)
@@ -22,118 +24,143 @@ namespace _4._Vending_Machine.Machine_Unit
 
         public static bool VendingMenu()
         {
+            VendingMachine start = new VendingMachine();    //Instantiating an object of the type VendingMachine
+
             Console.Clear();
-
-            VendingMachine newObject = new VendingMachine();
-            newObject.ShowAll();    //Showing the inventory
-
-            Console.WriteLine("8) Add money to the vending machine.");
-            Console.WriteLine("9) Eject remaining money.");
-            Console.Write("0) Close the app and walk away." +
-                "\n>");
+            start.ShowAll();
 
             switch (Console.ReadLine())
             {
                 case "1":
-                    VendingMachine buy1 = new VendingMachine();
-                    buy1.Purchase(1);
+                    start.Purchase(0, MoneyPool);
                     return true;
 
                 case "2":
-                    VendingMachine buy2 = new VendingMachine();
-                    buy2.Purchase(2);
+                    start.Purchase(1, MoneyPool);
                     return true;
 
                 case "3":
-                    VendingMachine buy3 = new VendingMachine();
-                    buy3.Purchase(3);
+                    start.Purchase(2, MoneyPool);
                     return true;
 
                 case "4":
-                    VendingMachine buy4 = new VendingMachine();
-                    buy4.Purchase(4);
+                    start.Purchase(3, MoneyPool);
                     return true;
 
                 case "5":
-                    VendingMachine buy5 = new VendingMachine();
-                    buy5.Purchase(5);
+                    start.Purchase(4, MoneyPool);
                     return true;
 
                 case "6":
-                    VendingMachine buy6 = new VendingMachine();
-                    buy6.Purchase(6);
+                    start.Purchase(5, MoneyPool);
                     return true;
 
                 case "7":
-                    VendingMachine buy7 = new VendingMachine();
-                    buy7.Purchase(7);
+                    start.Purchase(6, MoneyPool);
                     return true;
 
                 case "8":
-                    VendingMachine insert = new VendingMachine();
-                    insert.InsertMoney();
+                    start.InsertMoney();
                     return true;
 
                 case "9":
-                    VendingMachine purchase = new VendingMachine();
-                    purchase.EndTransaction();
+                    start.EndTransaction();
                     return true;
 
                 case "0":
                     return false;
+
                 default:
                     return true;
 
             }
         }
 
-        public void ShowAll()
+        public void InsertMoney()  //Implementing IVending InsertMoney
         {
-            VendingMachine newObjectx = new VendingMachine();
-            newObjectx.Inventory(0);  //Taking the information from the Inventory to show all products
+
+            Console.WriteLine("\nInsert money (Only valid SEK denominations):");
+            Console.Write(">");
+            string userInput = Console.ReadLine();
+
+            int moneyIn;
+            int.TryParse(userInput, out moneyIn);
+
+            if (CheckValid(moneyIn) == false)
+            {
+                Console.Clear();
+                Console.WriteLine("Not a valid denomination in SEK.");
+                Console.WriteLine("\nYou can try either: 1,2,5,10,20,50,100,200,500 or 1000.\n" +
+                    "\nPress ENTER to return to main menu.");
+                Console.ReadLine();
+                //VendingMenu();
+            }
+
+            else
+
+            {
+                MoneyPool += moneyIn;
+                //VendingMenu();
+            }
+
+            VendingMenu();
         }
 
-        public void InsertMoney()
+        public bool CheckValid(int moneyIn)  //A method for testing if the input money is of a valid denomination
         {
+            int[] validMoney = { 1, 2, 5, 10, 20, 50, 100, 200, 500, 1000 };
+            ReadOnlyCollection<int> readOnlyValidMoney = Array.AsReadOnly(validMoney);
 
-                Console.WriteLine("\nInsert money (Only valid SEK denominations):");
-                Console.Write(">");
-                string userInput = Console.ReadLine();
+            if (readOnlyValidMoney.Contains(moneyIn))
+            {
+                return true;
+            }
 
-                int moneyIn = CheckValid(userInput); //Using CheckValid to check if the user input is valid
-
-
-                if (CheckValid(userInput) == -1)
-                {
-                    Console.Clear();
-                    Console.WriteLine("Not a valid denomination in SEK.");
-                    Console.WriteLine("\nYou can try either: 1,2,5,10,20,50,100,200,500 or 1000.\n" +
-                        "\nPress ENTER to return to main menu.");
-                    Console.ReadLine();
-                }
-
-                else
-                {
-                    moneyPool += moneyIn;
-                }
+            else
+            {
+                return false;
+            }
         }
 
-        public void Purchase(int choice)
+        public void ShowAll()  //Implementing IVending ShowAll
         {
-            Inventory(choice); //Purchase a thing from the inventory
+
+            Console.WriteLine("****** The Vending machine ******");
+            Console.WriteLine("********** Inventory ************\n");
+
+            Inventory show = new Inventory();   //Displaying all products in the inventory
+            show.AllProducts();
+
+            Console.WriteLine("\n*********************************");
+            Console.WriteLine("       Inserted money: " + MoneyPool);
+            Console.WriteLine("\n*********** Your Choice *********");
+            Console.WriteLine("\n       8 - Insert money");
+            Console.WriteLine("       9 - Eject money");
+            Console.WriteLine("       0 - Close and walk away");
+            Console.Write(">");
+
         }
 
-        public void EndTransaction()
+        public void Purchase(int chosenProduct, int poolMoney)   //Implementing IVending Purchase
         {
 
-            int allChange = moneyPool;
-            
-            ChangeCounter(allChange); //Dividing the change in appropriate bills and coins
+            Inventory make = new Inventory();
+            make.PurchaseOne(chosenProduct, poolMoney);    //Make a purchase from the inventory
+
+        }
+
+
+        public void EndTransaction()   //Implementing IVending EndTransaction
+        {
+
+            int allChange = MoneyPool;
+
+            ChangeCounter(allChange);
 
             Console.Clear();
             Console.WriteLine("Thanks for buying from the Vending machine.\n" +
                 allChange + " SEK change is returned in the tray.\n" +
-                "\nThe change is divided into: \n" + exchangeMoney);
+                "\nThe change is divided into: \n" + ExchangeMoney);
 
             Console.WriteLine("\nPress ENTER to continue.");
             Console.ReadLine();
@@ -141,84 +168,73 @@ namespace _4._Vending_Machine.Machine_Unit
 
         }
 
-        public int ChangeCounter(int allchange)
+
+        public int ChangeCounter(int allChange) //Dividing the change in appropriate notes and coins.
         {
-            while (moneyPool >= 1000)  //Dividing the change in appropriate notes and coins.
+            while (MoneyPool >= 1000)
             {
-                moneyPool -= 1000;
-                exchangeMoney += "\nA thousand crown note.";
+                MoneyPool -= 1000;
+                ExchangeMoney += "\nA thousand crown note.";
             }
 
-            while (moneyPool >= 500)
+            while (MoneyPool >= 500)
             {
-                moneyPool -= 500;
-                exchangeMoney += "\nA five hundred crown note.";
+                MoneyPool -= 500;
+                ExchangeMoney += "\nA five hundred crown note.";
             }
 
-            while (moneyPool >= 100)
+            while (MoneyPool >= 200)
             {
-                moneyPool -= 100;
-                exchangeMoney += "\nA hundred crown note.";
+                MoneyPool -= 200;
+                ExchangeMoney += "\nA two hundred crown note.";
             }
 
-            while (moneyPool >= 50)
+            while (MoneyPool >= 100)
             {
-                moneyPool -= 50;
-                exchangeMoney += "\nA fifty crown note.";
+                MoneyPool -= 100;
+                ExchangeMoney += "\nA hundred crown note.";
             }
 
-            while (moneyPool >= 20)
+            while (MoneyPool >= 50)
             {
-                moneyPool -= 20;
-                exchangeMoney += "\nA twenty crown note.";
+                MoneyPool -= 50;
+                ExchangeMoney += "\nA fifty crown note.";
             }
 
-            while (moneyPool >= 10)
+            while (MoneyPool >= 20)
             {
-                moneyPool -= 10;
-                exchangeMoney += "\nA ten crown coin.";
+                MoneyPool -= 20;
+                ExchangeMoney += "\nA twenty crown note.";
             }
 
-            while (moneyPool >= 5)
+            while (MoneyPool >= 10)
             {
-                moneyPool -= 5;
-                exchangeMoney += "\nA five crown coin.";
+                MoneyPool -= 10;
+                ExchangeMoney += "\nA ten crown coin.";
             }
 
-            while (moneyPool >= 2)
+            while (MoneyPool >= 5)
             {
-                moneyPool -= 2;
-                exchangeMoney += "\nA two crown coin.";
+                MoneyPool -= 5;
+                ExchangeMoney += "\nA five crown coin.";
             }
 
-            while (moneyPool >= 1)
+            while (MoneyPool >= 2)
             {
-                moneyPool -= 1;
-                exchangeMoney += "\nA one crown coin.";
+                MoneyPool -= 2;
+                ExchangeMoney += "\nA two crown coin.";
             }
 
-            int noChange = moneyPool;
+            while (MoneyPool >= 1)
+            {
+                MoneyPool -= 1;
+                ExchangeMoney += "\nA one crown coin.";
+            }
+
+            int noChange = MoneyPool;
             return noChange;    //Returning the end result to test if the calculation is correct
 
         }
-
-        public int CheckValid(string userInput)  //A method for testing if the input money is of a valid denomination
-        {
-            int[] validMoney = { 1, 2, 5, 10, 20, 50, 100, 200, 500, 1000 };
-            ReadOnlyCollection<int> readOnlyValidMoney = Array.AsReadOnly(validMoney);
-
-            int moneyIn;
-            int.TryParse(userInput, out moneyIn);
-
-            if (readOnlyValidMoney.Contains(moneyIn))
-            {
-                return moneyIn;
-            }
-
-            else
-            {
-                return -1;
-            }
-        }
     }
 }
+

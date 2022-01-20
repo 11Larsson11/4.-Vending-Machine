@@ -6,7 +6,7 @@ namespace _4._Vending_Machine.Machine_Unit
 {
     public class Candy : Product
     {
-        public Candy(int Slot, string Info, int Cost) : base(Slot, Info, Cost) { }
+        public Candy(int Slot, string Info, int Cost, int Calories) : base(Slot, Info, Cost, Calories) { }
 
         public override void Examine()
         {
@@ -17,5 +17,13 @@ namespace _4._Vending_Machine.Machine_Unit
         {
             Console.WriteLine("Enjoy your candy! Please throw the wrapping in the garbage.");
         }
+
+        public override double MinutesToBurnCalories()
+        {
+            return MinutesToExercise = Calories / 2;
+        }
+
     }
+
 }
+
