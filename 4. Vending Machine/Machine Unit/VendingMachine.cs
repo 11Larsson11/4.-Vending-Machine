@@ -255,7 +255,7 @@ namespace _4._Vending_Machine.Machine_Unit
                 MoneyPool -= 2;
                 ExchangeMoney += "\nA two crown coin.";
             }
-
+            
             while (MoneyPool >= 1)
             {
                 MoneyPool -= 1;

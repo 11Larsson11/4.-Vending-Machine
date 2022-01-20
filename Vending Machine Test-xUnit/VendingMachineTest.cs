@@ -15,7 +15,7 @@ namespace Vending_Machine_Test_xUnit
         {
             Product sut = new Candy(a, b, c, d);
             double result = sut.MinutesToBurnCalories();
-
+            
             Assert.Equal(expectedResult, result);
         }
 
