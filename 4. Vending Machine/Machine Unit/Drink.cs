@@ -6,7 +6,7 @@ namespace _4._Vending_Machine.Machine_Unit
 {
     public class Drink : Product
     {
-        public Drink(int Slot, string Info, int Cost, int Calories) : base(Slot, Info, Cost, Calories) { }
+        public Drink(int Slot, string Info, int Cost, double Calories) : base(Slot, Info, Cost, Calories) { }
 
         public override void Examine() //A building block of the menu, that displays product slot, name and cost
         {
@@ -20,7 +20,7 @@ namespace _4._Vending_Machine.Machine_Unit
 
         public override double MinutesToBurnCalories()
         {
-            return MinutesToExercise = Calories / 2.2;
+            return MinutesToExercise = Calories / 2.5;
         }
 
     }

@@ -1,6 +1,5 @@
 using System;
 using Xunit;
-using _4._Vending_Machine;
 using _4._Vending_Machine.Machine_Unit;
 
 
@@ -8,72 +7,36 @@ namespace Vending_Machine_Test_xUnit
 {
     public class VendingMachineTest : VendingMachine
     {
-        [Fact]
-        public void CandyTest()
+
+        [Theory]
+        [InlineData(2, "nam", 23, 200, 100)]
+        [InlineData(2, "nam", 23, 150, 75)]
+        public void CandyTest(int a, string b, int c, double d, double expectedResult)
         {
+            Product sut = new Candy(a, b, c, d);
+            double result = sut.MinutesToBurnCalories();
 
-            
-
-            int a = 1;
-            string b = "Generic Name";
-            int c = 2;
-
-            Candy sut = new Candy(a, b, c);
-
-            Assert.Equal(sut.Slot, a);
-            Assert.Equal(sut.Info, b);
-            Assert.Equal(sut.Cost, c);
-        }
-
-        [Fact]
-        public void FoodTest()
-        {
-            int a = 1;
-            string b = "Generic Name";
-            int c = 2;
-
-            Food sut = new Food(a, b, c);
-
-            Assert.Equal(sut.Slot, a);
-            Assert.Equal(sut.Info, b);
-            Assert.Equal(sut.Cost, c);
-        }
-
-        [Fact]
-        public void DrinkTest()
-        {
-            int a = 1;
-            string b = "Generic Name";
-            int c = 2;
-
-            Drink sut = new Drink(a, b, c);
-
-            Assert.Equal(sut.Slot, a);
-            Assert.Equal(sut.Info, b);
-            Assert.Equal(sut.Cost, c);
-        }
-
-        [Fact]
-        public void ProductTest()
-        {
-            int a = 2;
-            string b = "Another generic name";
-            int c = 3;
-
-            Product sut = new Drink(a, b, c);
-            Examine();
-            sut.Use();
+            Assert.Equal(expectedResult, result);
         }
 
         [Theory]
-        [InlineData("0", -1)]
-        [InlineData("1", 1)]
-        [InlineData("3", -1)]
-        [InlineData("20", 20)]
-        [InlineData("r", -1)]
-        public void CheckValidTest(string input, int expectedResult) //Testing both against the valid denominations and if it's an int value
+        [InlineData(2, "nam", 23, 90, 50)]
+        [InlineData(2, "nam", 23, 270, 150)]
+        public void FoodTest(int a, string b, int c, double d, double expectedResult)
         {
-            var result = CheckValid(input);
+            Product sut = new Food(a, b, c, d);
+            double result = sut.MinutesToBurnCalories();
+
+            Assert.Equal(expectedResult, result);
+        }
+
+        [Theory]
+        [InlineData(2,"nam",23,250, 100)]
+        [InlineData(2,"nam",23,330, 132)]
+        public void DrinkTest(int a, string b, int c, double d, double expectedResult)
+        {
+            Product sut = new Drink(a, b, c, d);
+            double result = sut.MinutesToBurnCalories();
 
             Assert.Equal(expectedResult, result);
         }
@@ -86,19 +49,17 @@ namespace Vending_Machine_Test_xUnit
         public void ChangeCounterTest(int input, int expectedResult)
         {
             var result = ChangeCounter(input);
-
             Assert.Equal(expectedResult, result);
         }
 
         [Theory]
-        [InlineData(0,15,0)]
-        [InlineData(35,8,1)]
-        [InlineData(15,15,1)]
-        [InlineData(3,22,0)]
-        public void CanBuyTest(int input1, int input2, int expectedResult)
+        [InlineData(1,15,false)]
+        [InlineData(35,8,true)]
+        [InlineData(15,15,true)]
+        [InlineData(3,22,false)]
+        public void CanBuyTest(int input1, int input2, bool expectedResult)
         {
             var result = CanBuy(input1, input2);
-
             Assert.Equal(expectedResult, result);
         }
     }

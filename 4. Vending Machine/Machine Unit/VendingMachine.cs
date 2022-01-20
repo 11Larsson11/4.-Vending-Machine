@@ -8,9 +8,28 @@ namespace _4._Vending_Machine.Machine_Unit
 {
     public class VendingMachine : IVending
     {
-
         public static int MoneyPool { get; set; }
         public string ExchangeMoney { get; set; }
+
+
+        public static Candy product1 = new Candy(1, "Snickers", 15, 487);
+        public static Candy product2 = new Candy(2, "Mars bar", 12, 449);
+        public static Candy product3 = new Candy(3, "Nonstop ", 24, 480);
+        public static Drink product4 = new Drink(4, "Smakis", 8, 22);
+        public static Drink product5 = new Drink(5, "Pepsi", 12, 44);
+        public static Food product6 = new Food(6, "Sandwich", 22, 252);
+        public static Food product7 = new Food(7, "Caviar ", 235, 270);
+
+        public List<Product> existingProducts = new List<Product>()   //A list of all existing products in the vending machine
+
+            { product1,
+            product2,
+            product3,
+            product4,
+            product5,
+            product6,
+            product7
+            };
 
         public static void PowerOn()
         {
@@ -24,7 +43,7 @@ namespace _4._Vending_Machine.Machine_Unit
 
         public static bool VendingMenu()
         {
-            VendingMachine start = new VendingMachine();    //Instantiating an object of the type VendingMachine
+            VendingMachine start = new VendingMachine();    //Instantiating an object to control the features
 
             Console.Clear();
             start.ShowAll();
@@ -78,7 +97,6 @@ namespace _4._Vending_Machine.Machine_Unit
 
         public void InsertMoney()  //Implementing IVending InsertMoney
         {
-
             Console.WriteLine("\nInsert money (Only valid SEK denominations):");
             Console.Write(">");
             string userInput = Console.ReadLine();
@@ -93,14 +111,12 @@ namespace _4._Vending_Machine.Machine_Unit
                 Console.WriteLine("\nYou can try either: 1,2,5,10,20,50,100,200,500 or 1000.\n" +
                     "\nPress ENTER to return to main menu.");
                 Console.ReadLine();
-                //VendingMenu();
             }
 
             else
 
             {
                 MoneyPool += moneyIn;
-                //VendingMenu();
             }
 
             VendingMenu();
@@ -128,8 +144,10 @@ namespace _4._Vending_Machine.Machine_Unit
             Console.WriteLine("****** The Vending machine ******");
             Console.WriteLine("********** Inventory ************\n");
 
-            Inventory show = new Inventory();   //Displaying all products in the inventory
-            show.AllProducts();
+             foreach (Product p in existingProducts) //Displaying all products in the inventory
+            {
+                p.Examine();
+            }
 
             Console.WriteLine("\n*********************************");
             Console.WriteLine("       Inserted money: " + MoneyPool);
@@ -138,17 +156,32 @@ namespace _4._Vending_Machine.Machine_Unit
             Console.WriteLine("       9 - Eject money");
             Console.WriteLine("       0 - Close and walk away");
             Console.Write(">");
-
         }
 
         public void Purchase(int chosenProduct, int poolMoney)   //Implementing IVending Purchase
         {
+       
+            int productCost = existingProducts[chosenProduct].Cost;
+            double exerciseTime = existingProducts[chosenProduct].MinutesToBurnCalories();
 
-            Inventory make = new Inventory();
-            make.PurchaseOne(chosenProduct, poolMoney);    //Make a purchase from the inventory
+            if (CanBuy(poolMoney, productCost) == true)
+            {
+                MoneyPool -= productCost;
+                Console.Clear();
+                Console.WriteLine("\nYou just bought one " + existingProducts[chosenProduct].Info + "!\n");
+                Console.WriteLine("\nIf you sit still, it will take exactly " + exerciseTime + " minutes to burn the calories it contain.\n");
+                existingProducts[chosenProduct].Use();
+            }
 
+            else //An error message if the user doesn't have enough money to buy the product
+            {
+                Console.Clear();
+                Console.WriteLine("Not enough money! Add some more or choose another product!");
+            }
+
+            Console.WriteLine("\nPress ENTER to continue");
+            Console.ReadLine();
         }
-
 
         public void EndTransaction()   //Implementing IVending EndTransaction
         {
@@ -165,9 +198,7 @@ namespace _4._Vending_Machine.Machine_Unit
             Console.WriteLine("\nPress ENTER to continue.");
             Console.ReadLine();
 
-
         }
-
 
         public int ChangeCounter(int allChange) //Dividing the change in appropriate notes and coins.
         {
@@ -234,6 +265,18 @@ namespace _4._Vending_Machine.Machine_Unit
             int noChange = MoneyPool;
             return noChange;    //Returning the end result to test if the calculation is correct
 
+        }
+
+        public bool CanBuy(int checkMoney, int productCost) //Checking if the user has the money to buy a product
+        {
+            if (checkMoney >= productCost)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

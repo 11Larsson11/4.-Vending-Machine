@@ -6,7 +6,7 @@ namespace _4._Vending_Machine.Machine_Unit
 {
     public class Food : Product
     {
-        public Food(int Slot, string Info, int Cost, int Calories) : base(Slot, Info, Cost, Calories) { }
+        public Food(int Slot, string Info, int Cost, double Calories) : base(Slot, Info, Cost, Calories) { }
 
         public override void Examine()
         {

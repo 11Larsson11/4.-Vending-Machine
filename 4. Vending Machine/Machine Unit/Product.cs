@@ -12,12 +12,12 @@ namespace _4._Vending_Machine.Machine_Unit
             public int Calories { get; set; }
             public double MinutesToExercise { get; set; }
 
-            public Product(int slot = 0, string info = "Noname", int cost = 0, int calories = 0)
+            public Product(int slot = 0, string info = "Noname", int cost = 0, double calories = 0)
             {
                 Slot = slot;
                 Info = info;
                 Cost = cost;
-                Calories = calories;
+                Calories = (int)calories;
             }
 
             public virtual void Examine()
